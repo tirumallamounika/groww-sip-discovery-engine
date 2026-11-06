@@ -1,0 +1,1 @@
+# SIP Continuity Discovery Engine\n\nPublic research prototype for a Groww Growth PM fellowship assignment. Not affiliated with Groww.\n\nRun: `streamlit run app.py`\n\nEvidence and AI evaluation limitations are displayed in the app.\n

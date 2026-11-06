@@ -1,0 +1,5 @@
+evidence_id,test_case,predicted_sip_status,predicted_first_year,gate_decision,failed_checks,evaluation_version,evaluated_at_utc
+SIP002,Correct AI prediction,Considering pause,Unknown,ACCEPTED,,v2,2026-11-06T07:56:09.055238+00:00
+SIP002,Incorrect SIP status,Stopped,Unknown,REJECTED,matches_human_status,v2,2026-11-06T07:56:09.055295+00:00
+SIP002,Fabricated evidence quote,Considering pause,Unknown,REJECTED,quote_grounded,v2,2026-11-06T07:56:09.055325+00:00
+SIP002,Unsupported first-year claim,Considering pause,Confirmed,REJECTED,first_year_matches_human,v2,2026-11-06T07:56:09.055351+00:00
