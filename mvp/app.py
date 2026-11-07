@@ -170,10 +170,10 @@ if 'last_result' in st.session_state:
                 if confirmation.strip() == 'Saved':
                     st.success('Feedback saved to the research sheet!')
                 else:
-                    st.error(
-                        'Google Sheets did not confirm the save. '
-                        'Please contact the researcher.'
-                    )
+                    else:
+    st.error(
+        f'Google Sheets response: {confirmation[:200]}'
+    )
 
             except Exception:
                 st.error(
