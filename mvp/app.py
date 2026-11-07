@@ -110,17 +110,77 @@ if 'last_result' in st.session_state:
     st.write('**Response source:**', 'Gemini-generated answer passed rule checks' if used_ai else 'Prewritten, deterministic fallback')
     st.write('**Gate result:**', reason)
     st.caption('The automated gate checks structure and certain risky phrases; it cannot establish full factual correctness. No account or bank data is accessed.')
+  
     st.subheader('Usability feedback')
-    feedback = st.radio('Was this explanation easy to understand?', ['Yes', 'Partly', 'No'], index=None, key='feedback')
-    if st.button('Record feedback for this session'):
-        if feedback:
-            st.session_state['session_feedback'] = {'issue': previous_issue, 'feedback': feedback, 'response_source': 'AI' if used_ai else 'Fallback'}
-            st.success('Feedback recorded in this browser session only. It is not saved to a shared database.')
+    st.caption(
+        'Optional anonymous feedback for research. '
+        'Please do not include personal or financial details.'
+    )
+
+    feedback = st.radio(
+        'Was this explanation easy to understand?',
+        ['Yes', 'Partly', 'No'],
+        index=None,
+        key='feedback'
+    )
+
+    ease = st.radio(
+        'How easy was the bot to use?',
+        ['Easy', 'Okay', 'Difficult'],
+        index=None
+    )
+
+    improvement = st.text_area(
+        'What was confusing or could be improved? (optional)',
+        max_chars=300
+    )
+
+    if st.button('Submit feedback'):
+        if not feedback or not ease:
+            st.warning('Please answer both questions.')
         else:
-            st.warning('Please choose an option first.')
-    if 'session_feedback' in st.session_state:
-        st.code(json.dumps(st.session_state['session_feedback'], indent=2), language='json')
-        st.caption('For a usability study, the researcher can manually record this feedback with participant consent.')
+            try:
+                import urllib.request
+                import uuid
+
+                if 'tester_id' not in st.session_state:
+                    st.session_state['tester_id'] = uuid.uuid4().hex[:12]
+
+                payload = {
+                    'token': st.secrets['FEEDBACK_TOKEN'],
+                    'tester_id': st.session_state['tester_id'],
+                    'scenario': previous_issue,
+                    'response_helpful': feedback,
+                    'ease_of_use': ease,
+                    'confusing_or_improve': improvement
+                }
+
+                request = urllib.request.Request(
+                    st.secrets['FEEDBACK_WEBHOOK_URL'],
+                    data=json.dumps(payload).encode('utf-8'),
+                    headers={'Content-Type': 'text/plain'},
+                    method='POST'
+                )
+
+                with urllib.request.urlopen(
+                    request, timeout=15
+                ) as response:
+                    confirmation = response.read().decode('utf-8')
+
+                if confirmation.strip() == 'Saved':
+                    st.success('Feedback saved to the research sheet!')
+                else:
+                    st.error(
+                        'Google Sheets did not confirm the save. '
+                        'Please contact the researcher.'
+                    )
+
+            except Exception:
+                st.error(
+                    'Feedback could not be saved. '
+                    'Please try again later.'
+                )
+
 
 with st.expander('How this prototype works'):
     st.write('If a GEMINI_API_KEY is configured in Streamlit secrets, the app requests a structured explanation from Gemini. A visible rules-based gate checks required fields, quote-free claims, and selected risky language. Failed checks, API errors, or missing configuration produce a fixed, non-AI fallback. This is a limited safety mechanism, not a guarantee of correctness.')
