@@ -167,13 +167,14 @@ if 'last_result' in st.session_state:
                 ) as response:
                     confirmation = response.read().decode('utf-8')
 
+                
                 if confirmation.strip() == 'Saved':
                     st.success('Feedback saved to the research sheet!')
                 else:
-                    else:
-    st.error(
-        f'Google Sheets response: {confirmation[:200]}'
-    )
+                    st.error(
+                        f'Google Sheets response: {confirmation[:200]}'
+                    )
+
 
             except Exception:
                 st.error(
