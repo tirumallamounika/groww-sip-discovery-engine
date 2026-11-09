@@ -101,4 +101,4 @@
 - The excluded seventh row contains internally inconsistent eligibility/status answers and should be reviewed before inclusion.
 - No independent usability sessions are documented in this source.
 
-**Suggested deck wording:** “Six usable first-SIP investor responses collected through an asynchronous Google Form (28–29 Oct 2026); synthesized into participant-level qualitative notes. One inconsistent response excluded. These are form-based research responses, not moderated interviews or usability tests.”
+**Suggested deck wording:** “Six usable first-SIP investor responses collected through an asynchronous Google Form (28–29 Oct 2026); synthesized into participant-level qualitative notes. One inconsistent response excluded. These are form-based research responses, not moderated interviews or usability tests."
